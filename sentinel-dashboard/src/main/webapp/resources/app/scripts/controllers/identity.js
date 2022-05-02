@@ -1,7 +1,7 @@
 var app = angular.module('sentinelDashboardApp');
 
 app.controller('IdentityCtl', ['$scope', '$stateParams', 'IdentityService',
-  'ngDialog', 'FlowServiceV1', 'DegradeService', 'AuthorityRuleService', 'ParamFlowService', 'MachineService',
+  'ngDialog', 'FlowServiceV2', 'DegradeService', 'AuthorityRuleService', 'ParamFlowService', 'MachineService',
   '$interval', '$location', '$timeout',
   function ($scope, $stateParams, IdentityService, ngDialog,
     FlowService, DegradeService, AuthorityRuleService, ParamFlowService, MachineService, $interval, $location, $timeout) {
@@ -62,11 +62,11 @@ app.controller('IdentityCtl', ['$scope', '$stateParams', 'IdentityService',
       };
 
       flowRuleDialogScope.flowRuleDialog = {
-        title: '新增流控规则',
-        type: 'add',
-        confirmBtnText: '新增',
-        saveAndContinueBtnText: '新增并继续添加',
-        showAdvanceButton: true
+          title: '新增流控规则',
+          type: 'add',
+          confirmBtnText: '新增',
+          saveAndContinueBtnText: '新增并继续添加',
+          showAdvanceButton: true
       };
       // $scope.flowRuleDialog = {
       //     showAdvanceButton : true
@@ -89,16 +89,18 @@ app.controller('IdentityCtl', ['$scope', '$stateParams', 'IdentityService',
     };
 
     function saveFlowRule() {
-      if (!FlowService.checkRuleValid(flowRuleDialogScope.currentRule)) {
-        return;
-      }
-      FlowService.newRule(flowRuleDialogScope.currentRule).success(function (data) {
-        if (data.code === 0) {
-          flowRuleDialog.close();
-          let url = '/dashboard/flow/' + $scope.app;
-          $location.path(url);
-        } else {
-          alert('失败：' + data.msg);
+        if (!FlowService.checkRuleValid(flowRuleDialogScope.currentRule)) {
+            return;
+        }
+        FlowService.newRule(flowRuleDialogScope.currentRule).success(function (data) {
+                if (data.code === 0) {
+                    flowRuleDialog.close();
+                    //成功后重定向到V2的页面
+                    // let url = '/dashboard/flow/' + $scope.app;
+                    let url = '/dashboard/v2/flow/' + $scope.app;
+                    $location.path(url);
+                } else {
+                    alert('失败：' + data.msg);
         }
       }).error((data, header, config, status) => {
           alert('未知错误');

@@ -1,0 +1,9 @@
+myconfig:
+  nacos:
+    serverAddr: 192.168.24.201:8848
+    namespace: 738b8dcc-3952-4f32-b34c-5682af248f22
+    groupId: SENTINEL_GROUP
+    username: nacos
+    password: aW5maWFpIG5hY29zIHByb2Qgc2VydmVy
+server:
+  port: 9999

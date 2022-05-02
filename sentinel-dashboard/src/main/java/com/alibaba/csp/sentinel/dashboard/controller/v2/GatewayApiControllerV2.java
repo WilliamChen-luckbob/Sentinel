@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.csp.sentinel.dashboard.controller.gateway;
+package com.alibaba.csp.sentinel.dashboard.controller.v2;
 
 import com.alibaba.csp.sentinel.dashboard.auth.AuthAction;
 import com.alibaba.csp.sentinel.dashboard.auth.AuthService;
@@ -31,25 +31,39 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.LinkedHashSet;
+import java.util.List;
 
-import static com.alibaba.csp.sentinel.adapter.gateway.common.SentinelGatewayConstants.*;
+import static com.alibaba.csp.sentinel.adapter.gateway.common.SentinelGatewayConstants.URL_MATCH_STRATEGY_EXACT;
+import static com.alibaba.csp.sentinel.adapter.gateway.common.SentinelGatewayConstants.URL_MATCH_STRATEGY_PREFIX;
+import static com.alibaba.csp.sentinel.adapter.gateway.common.SentinelGatewayConstants.URL_MATCH_STRATEGY_REGEX;
 
 /**
  * Gateway api Controller for manage gateway api definitions.
+ * 管理网关api定义的接口
+ * todo 后续在自定义的时候可能会用到修改此处的持久化方案
  *
  * @author cdfive
+ * @author william.chen
+ * @date 2022-04-21
  * @since 1.7.0
  */
-
-@RestController
+@Deprecated
+//@RestController
 @RequestMapping(value = "/gateway/api")
-public class GatewayApiController {
+public class GatewayApiControllerV2 {
 
-    private final Logger logger = LoggerFactory.getLogger(GatewayApiController.class);
+    private final Logger logger = LoggerFactory.getLogger(GatewayApiControllerV2.class);
 
     @Autowired
     private InMemApiDefinitionStore repository;

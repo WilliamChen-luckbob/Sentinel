@@ -40,19 +40,22 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller regarding APIs of degrade rules. Refactored since 1.8.0.
+ * 官方源码，旧版本，新版本使用Nacos持久化与客户端进行通信，不再使用原始推送方式
+ * Deprecated on 2022-04-20
  *
  * @author Carpenter Lee
  * @author Eric Zhao
+ * @author William.Chen
  */
-@RestController
+//@RestController
+@Deprecated
 @RequestMapping("/degrade")
-public class DegradeController {
+public class DegradeControllerV1 {
 
-    private final Logger logger = LoggerFactory.getLogger(DegradeController.class);
+    private final Logger logger = LoggerFactory.getLogger(DegradeControllerV1.class);
 
     @Autowired
     private RuleRepository<DegradeRuleEntity, Long> repository;

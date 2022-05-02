@@ -13,44 +13,47 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.csp.sentinel.dashboard.rule.nacos;
-
-import java.util.List;
+package com.alibaba.csp.sentinel.dashboard.rule;
 
 import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.FlowRuleEntity;
-import com.alibaba.csp.sentinel.dashboard.rule.DynamicRulePublisher;
+import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.SystemRuleEntity;
+import com.alibaba.csp.sentinel.dashboard.util.NacosConfigUtil;
 import com.alibaba.csp.sentinel.datasource.Converter;
-import com.alibaba.csp.sentinel.util.AssertUtil;
+import com.alibaba.csp.sentinel.util.StringUtil;
 import com.alibaba.nacos.api.config.ConfigService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * @author Eric Zhao
+ * @author William.chen
+ * @date 2022-04-21
  * @since 1.4.0
  */
-@Component("flowRuleNacosPublisher")
-public class FlowRuleNacosPublisher implements DynamicRulePublisher<List<FlowRuleEntity>> {
-
+@Component("systemRuleNacosProvider")
+public class SystemRuleNacosProvider implements DynamicRuleProvider<List<SystemRuleEntity>> {
     @Autowired
     private ConfigService configService;
     @Autowired
-    private Converter<List<FlowRuleEntity>, String> converter;
+    private Converter<String, List<SystemRuleEntity>> converter;
 
     /**
-     * 将数据发布到Nacos上
-     * @param app app name
-     * @param rules list of rules to push
+     * 从Nacos读取指定配置，并尝试转换成FlowRuleEntity列表返回
+     *
+     *
+     * @param appName
+     * @return
      * @throws Exception
      */
     @Override
-    public void publish(String app, List<FlowRuleEntity> rules) throws Exception {
-        AssertUtil.notEmpty(app, "app name cannot be empty");
-        if (rules == null) {
-            return;
+    public List<SystemRuleEntity> getRules(String appName) throws Exception {
+        String rules = configService.getConfig(appName + NacosConfigUtil.SYSTEM_DATA_ID_POSTFIX,
+            NacosConfigUtil.GROUP_ID, 3000);
+        if (StringUtil.isEmpty(rules)) {
+            return new ArrayList<>();
         }
-        configService.publishConfig(app + NacosConfigUtil.FLOW_DATA_ID_POSTFIX,
-            NacosConfigUtil.GROUP_ID, converter.convert(rules));
+        return converter.convert(rules);
     }
 }
